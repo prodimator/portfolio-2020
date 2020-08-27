@@ -1,26 +1,49 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+import Flexbox from 'flexbox-react';
+import './App.scss';
+import 'antd/dist/antd.less';
+import { Layout } from 'antd';
+import Home from './view/home';
+import Menu from './components/menu';
+import InitialLoadingState from './components/initialLoadingState';
+import VerticalIcons from './components/verticalIcons';
+import background from './assets/background3.jpg';
+import Modal from './components/modal';
+import UnderConstruction from './view/underConctruction';
 
-function App() {
+const { Header, Footer, Sider, Content } = Layout;
+
+const App = () => {
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setShowModal(true);
+    }, 2000);
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <Flexbox className="app" justifyContent="center" style={{ backgroundImage: `url(${background})` }}>
+      {isLoading ? <InitialLoadingState /> :
+        <Flexbox className="content-well" flexDirection="column">
+          <Menu />
+          <Flexbox className="content" alignItems="center" flex="1">
+            <VerticalIcons />
+            <Home />
+          </Flexbox>
+        </Flexbox>
+      }
+      {showModal &&
+        <Modal
+          toggleModal={() => setShowModal(!showModal)}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+          <UnderConstruction />
+        </Modal>
+      }
+    </Flexbox>
+  )
 }
 
 export default App;
